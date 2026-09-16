@@ -3,23 +3,18 @@ import { Router } from 'express'
 import type { Services } from '../services'
 import auditSearchRequest from '../middleware/auditSearchRequest'
 
+import ruleConfigurationsRoutes from './ruleConfigurations'
+
 export enum Page {
   EXAMPLE_PAGE = 'EXAMPLE_PAGE',
   SEARCH_OFFENDERS = 'SEARCH_OFFENDERS',
 }
 
 export default function routes(services: Services): Router {
-  const { auditService, exampleService } = services
   const router = Router()
 
-  router.get('/', async (req, res, _next) => {
-    await auditService.logPageView(Page.EXAMPLE_PAGE, {
-      who: res.locals.user.username,
-      correlationId: req.id,
-    })
-
-    const currentTime = await exampleService.getCurrentTime()
-    return res.render('pages/index', { currentTime })
+  router.get('/', async (_, res, _next) => {
+    res.redirect('/rule-configurations')
   })
 
   // Example of an audited route.
@@ -30,6 +25,8 @@ export default function routes(services: Services): Router {
       return res.redirect('/')
     },
   )
+
+  router.use('/rule-configurations', ruleConfigurationsRoutes(services.ruleConfigurationService))
 
   return router
 }

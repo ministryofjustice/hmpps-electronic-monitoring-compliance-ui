@@ -2,7 +2,7 @@ import { AuthenticationClient, InMemoryTokenStore, RedisTokenStore } from '@mini
 import { createRedisClient } from './redisClient'
 import config from '../config'
 import logger from '../../logger'
-import ExampleApiClient from './exampleApiClient'
+import ComplianceApiClient from './complianceApiClient'
 import applicationInfoSupplier from '../applicationInfo'
 
 const applicationInfo = applicationInfoSupplier()
@@ -17,10 +17,10 @@ export const dataAccess = () => {
   return {
     applicationInfo,
     hmppsAuthClient,
-    exampleApiClient: new ExampleApiClient(hmppsAuthClient),
+    complianceApiClient: new ComplianceApiClient(hmppsAuthClient),
   }
 }
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { AuthenticationClient, ExampleApiClient }
+export { AuthenticationClient, ComplianceApiClient }
