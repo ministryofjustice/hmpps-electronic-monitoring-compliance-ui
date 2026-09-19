@@ -50,4 +50,43 @@ describe('ComplianceApiClient', () => {
       ])
     })
   })
+
+  describe('getDeviceCompliance', () => {
+    it('should get device compliance using a system token', async () => {
+      nock(config.apis.complianceApi.url)
+        .get('/v1/device-compliance')
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(200, {
+          summary: {
+            compliant: 1,
+            deactivated: 0,
+            nonCompliant: 0,
+          },
+          devices: [
+            {
+              deviceId: 1,
+              status: 'ACTIVATED',
+              state: 'COMPLIANT',
+            },
+          ],
+        })
+
+      const response = await complianceApiClient.getDeviceCompliance()
+
+      expect(response).toEqual({
+        summary: {
+          compliant: 1,
+          deactivated: 0,
+          nonCompliant: 0,
+        },
+        devices: [
+          {
+            deviceId: 1,
+            status: 'ACTIVATED',
+            state: 'COMPLIANT',
+          },
+        ],
+      })
+    })
+  })
 })

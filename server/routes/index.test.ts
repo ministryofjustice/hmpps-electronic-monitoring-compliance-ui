@@ -26,7 +26,7 @@ describe('GET /', () => {
   it('should redirect to rule configurations index page', () => {
     auditService.logPageView.mockResolvedValue(undefined)
 
-    return request(app).get('/').expect(302).expect('Location', '/rule-configurations')
+    return request(app).get('/').expect(302).expect('Location', '/device-compliance')
   })
 })
 

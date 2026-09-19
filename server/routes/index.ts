@@ -4,6 +4,7 @@ import type { Services } from '../services'
 import auditSearchRequest from '../middleware/auditSearchRequest'
 
 import ruleConfigurationsRoutes from './ruleConfigurations'
+import deviceComplianceRoutes from './deviceCompliance'
 
 export enum Page {
   EXAMPLE_PAGE = 'EXAMPLE_PAGE',
@@ -14,7 +15,7 @@ export default function routes(services: Services): Router {
   const router = Router()
 
   router.get('/', async (_, res, _next) => {
-    res.redirect('/rule-configurations')
+    res.redirect('/device-compliance')
   })
 
   // Example of an audited route.
@@ -26,6 +27,7 @@ export default function routes(services: Services): Router {
     },
   )
 
+  router.use('/device-compliance', deviceComplianceRoutes(services.deviceComplianceService))
   router.use('/rule-configurations', ruleConfigurationsRoutes(services.ruleConfigurationService))
 
   return router
