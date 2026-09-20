@@ -10,7 +10,7 @@ export default class ComplianceApiClient extends RestClient {
     super('Electronic Monitoring Compliance API', config.apis.complianceApi, logger, authenticationClient)
   }
 
-  async getDeviceCompliance(): Promise<DeviceComplianceList> {
+  async getDeviceComplianceList(): Promise<DeviceComplianceList> {
     return this.get<DeviceComplianceList>(
       {
         path: '/v1/device-compliance',

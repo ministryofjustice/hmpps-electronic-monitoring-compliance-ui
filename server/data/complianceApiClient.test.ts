@@ -71,7 +71,7 @@ describe('ComplianceApiClient', () => {
           ],
         })
 
-      const response = await complianceApiClient.getDeviceCompliance()
+      const response = await complianceApiClient.getDeviceComplianceList()
 
       expect(response).toEqual({
         summary: {

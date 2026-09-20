@@ -4,7 +4,7 @@ import { DeviceComplianceList } from '../types/deviceComplianceList'
 export default class DeviceComplianceService {
   constructor(private readonly complianceApiClient: ComplianceApiClient) {}
 
-  async getDeviceCompliance(): Promise<DeviceComplianceList> {
-    return this.complianceApiClient.getDeviceCompliance()
+  async getDeviceComplianceList(): Promise<DeviceComplianceList> {
+    return this.complianceApiClient.getDeviceComplianceList()
   }
 }

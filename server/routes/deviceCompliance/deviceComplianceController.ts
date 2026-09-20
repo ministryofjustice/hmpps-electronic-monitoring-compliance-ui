@@ -5,7 +5,7 @@ export default class DeviceComplianceController {
   constructor(private readonly deviceComplianceService: DeviceComplianceService) {}
 
   get: RequestHandler = async (_, res): Promise<void> => {
-    const deviceCompliance = await this.deviceComplianceService.getDeviceCompliance()
+    const deviceCompliance = await this.deviceComplianceService.getDeviceComplianceList()
 
     res.render('pages/deviceCompliance/index', {
       deviceCompliance,

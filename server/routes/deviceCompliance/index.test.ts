@@ -28,7 +28,7 @@ afterEach(() => {
 
 describe('GET /device-compliance', () => {
   it('should render device-compliance', () => {
-    deviceComplianceService.getDeviceCompliance.mockResolvedValue({
+    deviceComplianceService.getDeviceComplianceList.mockResolvedValue({
       summary: {
         compliant: 1,
         deactivated: 0,
@@ -55,7 +55,7 @@ describe('GET /device-compliance', () => {
   })
 
   it('should handle errors from the compliance API', () => {
-    deviceComplianceService.getDeviceCompliance.mockRejectedValue(new Error('Some problem calling compliance API'))
+    deviceComplianceService.getDeviceComplianceList.mockRejectedValue(new Error('Some problem calling compliance API'))
 
     return request(app)
       .get('/device-compliance')
