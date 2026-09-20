@@ -51,7 +51,7 @@ describe('ComplianceApiClient', () => {
     })
   })
 
-  describe('getDeviceCompliance', () => {
+  describe('getDeviceComplianceList', () => {
     it('should get device compliance using a system token', async () => {
       nock(config.apis.complianceApi.url)
         .get('/v1/device-compliance')
@@ -84,6 +84,45 @@ describe('ComplianceApiClient', () => {
             deviceId: 1,
             status: 'ACTIVATED',
             state: 'COMPLIANT',
+          },
+        ],
+      })
+    })
+  })
+
+  describe('getDeviceCompliance', () => {
+    it('should get device compliance by id using a system token', async () => {
+      nock(config.apis.complianceApi.url)
+        .get('/v1/device-compliance/d4d854e9-4538-46c2-bf3d-6b0b81d07cae')
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(200, {
+          deviceId: 1814,
+          status: 'ACTIVATED',
+          state: 'COMPLIANT',
+          stateChangedAt: '2026-09-20T12:00:00Z',
+          rules: [
+            {
+              ruleId: 'BATTERY_LEVEL',
+              ruleVersion: 1,
+              state: 'COMPLIANT',
+              stateChangedAt: '2026-09-20T12:00:00Z',
+            },
+          ],
+        })
+
+      const response = await complianceApiClient.getDeviceCompliance('d4d854e9-4538-46c2-bf3d-6b0b81d07cae')
+
+      expect(response).toEqual({
+        deviceId: 1814,
+        status: 'ACTIVATED',
+        state: 'COMPLIANT',
+        stateChangedAt: '2026-09-20T12:00:00Z',
+        rules: [
+          {
+            ruleId: 'BATTERY_LEVEL',
+            ruleVersion: 1,
+            state: 'COMPLIANT',
+            stateChangedAt: '2026-09-20T12:00:00Z',
           },
         ],
       })

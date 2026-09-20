@@ -6,7 +6,8 @@ export default function routes(deviceComplianceService: DeviceComplianceService)
   const router = Router()
   const controller = new DeviceComplianceController(deviceComplianceService)
 
-  router.get('/', controller.get.bind(controller))
+  router.get('/', controller.list)
+  router.get('/:deviceComplianceId', controller.get)
 
   return router
 }

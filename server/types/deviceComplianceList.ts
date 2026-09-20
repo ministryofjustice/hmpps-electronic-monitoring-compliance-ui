@@ -8,6 +8,7 @@ export type DeviceComplianceList = {
     deactivated: number
   }
   devices: Array<{
+    id: string
     deviceId: number
     status: DeviceStatus
     state: ComplianceState | null

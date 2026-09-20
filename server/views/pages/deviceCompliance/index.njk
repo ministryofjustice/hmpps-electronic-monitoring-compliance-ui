@@ -1,6 +1,6 @@
 {% extends "partials/layout.njk" %}
 
-{% set pageTitle = "Device compliance" %}
+{% set pageTitle = "Device compliances" %}
 {% set currentNavigation = "device-compliance" %}
 
 {% block content %}
@@ -19,7 +19,7 @@
             Compliant
           </span>
           <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ deviceCompliance.summary.compliant }}
+            {{ deviceComplianceList.summary.compliant }}
           </strong>
         </div>
 
@@ -28,7 +28,7 @@
             Non-compliant
           </span>
           <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ deviceCompliance.summary.nonCompliant }}
+            {{ deviceComplianceList.summary.nonCompliant }}
           </strong>
         </div>
 
@@ -37,7 +37,7 @@
             Deactivated
           </span>
           <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ deviceCompliance.summary.deactivated }}
+            {{ deviceComplianceList.summary.deactivated }}
           </strong>
         </div>
 
@@ -47,7 +47,7 @@
         Devices
       </h2>
 
-      {% if deviceCompliance.devices.length %}
+      {% if deviceComplianceList.devices.length %}
 
         <table class="govuk-table">
           <thead class="govuk-table__head">
@@ -75,14 +75,19 @@
 
           <tbody class="govuk-table__body">
 
-            {% for device in deviceCompliance.devices %}
+            {% for device in deviceComplianceList.devices %}
               <tr class="govuk-table__row">
 
                 <th
                   scope="row"
                   class="govuk-table__header"
                 >
-                  {{ device.deviceId }}
+                  <a
+                    class="govuk-link"
+                    href="/device-compliance/{{ device.id }}"
+                  >
+                    {{ device.deviceId }}
+                  </a>
                 </th>
 
                 <td class="govuk-table__cell">
