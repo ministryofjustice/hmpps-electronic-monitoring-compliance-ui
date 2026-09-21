@@ -6,7 +6,8 @@ export default function routes(ruleConfigurationService: RuleConfigurationServic
   const router = Router()
   const controller = new RuleConfigurationsController(ruleConfigurationService)
 
-  router.get('/', controller.get)
+  router.get('/', controller.list)
+  router.get('/:ruleConfigurationId', controller.get)
 
   return router
 }

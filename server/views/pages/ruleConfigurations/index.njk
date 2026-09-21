@@ -31,7 +31,12 @@
             {% for ruleConfiguration in ruleConfigurations %}
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  {{ ruleConfiguration.ruleId }}
+                  <a
+                    class="govuk-link"
+                    href="/rule-configurations/{{ ruleConfiguration.id }}"
+                  >
+                    {{ ruleConfiguration.ruleId }}
+                  </a>
                 </td>
                 <td class="govuk-table__cell">
                   {{ ruleConfiguration.ruleVersion }}

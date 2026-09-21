@@ -20,6 +20,49 @@ describe('ComplianceApiClient', () => {
     jest.resetAllMocks()
   })
 
+  describe('getRuleConfiguration', () => {
+    it('should get a rule configuration using a system token', async () => {
+      nock(config.apis.complianceApi.url)
+        .get('/v1/rule-configurations/d922503c-886c-4e3d-bf66-0cf76a5bf5de')
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(200, {
+          id: 'd922503c-886c-4e3d-bf66-0cf76a5bf5de',
+          ruleId: 'BATTERY_LEVEL',
+          ruleVersion: 1,
+          revision: 1,
+          parameters: {
+            threshold: 20,
+          },
+          status: 'PUBLISHED',
+          summary: {
+            compliant: 0,
+            nonCompliant: 0,
+            noData: 0,
+            deactivated: 0,
+          },
+        })
+
+      const response = await complianceApiClient.getRuleConfiguration('d922503c-886c-4e3d-bf66-0cf76a5bf5de')
+
+      expect(response).toEqual({
+        id: 'd922503c-886c-4e3d-bf66-0cf76a5bf5de',
+        ruleId: 'BATTERY_LEVEL',
+        ruleVersion: 1,
+        revision: 1,
+        parameters: {
+          threshold: 20,
+        },
+        status: 'PUBLISHED',
+        summary: {
+          compliant: 0,
+          nonCompliant: 0,
+          noData: 0,
+          deactivated: 0,
+        },
+      })
+    })
+  })
+
   describe('getRuleConfigurations', () => {
     it('should get rule configurations using a system token', async () => {
       nock(config.apis.complianceApi.url)
@@ -27,6 +70,7 @@ describe('ComplianceApiClient', () => {
         .matchHeader('authorization', 'Bearer test-system-token')
         .reply(200, [
           {
+            id: 'a794058b-720b-47ef-af58-814050774b4f',
             ruleId: 'BATTERY_LEVEL',
             ruleVersion: 1,
             revision: 1,
@@ -40,6 +84,7 @@ describe('ComplianceApiClient', () => {
 
       expect(response).toEqual([
         {
+          id: 'a794058b-720b-47ef-af58-814050774b4f',
           ruleId: 'BATTERY_LEVEL',
           ruleVersion: 1,
           revision: 1,

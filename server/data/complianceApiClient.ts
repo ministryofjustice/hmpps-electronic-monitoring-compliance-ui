@@ -1,10 +1,11 @@
 import { RestClient, asSystem } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { RuleConfiguration } from '../types/ruleConfiguration'
+import { RuleConfigurationSummary } from '../types/ruleConfigurationSummary'
 import config from '../config'
 import logger from '../../logger'
 import { DeviceComplianceList } from '../types/deviceComplianceList'
 import { DeviceCompliance } from '../types/deviceCompliance'
+import { RuleConfiguration } from '../types/ruleConfiguration'
 
 export default class ComplianceApiClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
@@ -29,8 +30,17 @@ export default class ComplianceApiClient extends RestClient {
     )
   }
 
-  async getRuleConfigurations(): Promise<RuleConfiguration[]> {
-    return this.get<RuleConfiguration[]>(
+  async getRuleConfiguration(id: string): Promise<RuleConfiguration> {
+    return this.get<RuleConfiguration>(
+      {
+        path: `/v1/rule-configurations/${id}`,
+      },
+      asSystem(),
+    )
+  }
+
+  async getRuleConfigurations(): Promise<RuleConfigurationSummary[]> {
+    return this.get<RuleConfigurationSummary[]>(
       {
         path: '/v1/rule-configurations',
       },

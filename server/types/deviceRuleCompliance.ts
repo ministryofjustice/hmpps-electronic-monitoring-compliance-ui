@@ -1,6 +1,6 @@
 import { ComplianceState } from './complianceState'
 
-export type RuleCompliance = {
+export type DeviceRuleCompliance = {
   ruleId: string
   ruleVersion: number
   state: ComplianceState
