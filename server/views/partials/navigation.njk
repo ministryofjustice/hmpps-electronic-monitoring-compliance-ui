@@ -1,0 +1,16 @@
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+
+{{ govukServiceNavigation({
+  navigation: [
+    {
+      href: "/device-compliance",
+      text: "Device compliance",
+      active: currentNavigation == "device-compliance"
+    },
+    {
+      href: "/rule-configurations",
+      text: "Rule configurations",
+      active: currentNavigation == "rule-configurations"
+    }
+  ]
+}) }}

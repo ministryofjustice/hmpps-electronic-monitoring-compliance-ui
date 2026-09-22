@@ -1,0 +1,144 @@
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Rule configuration" %}
+{% set currentNavigation = "rule-configurations" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <a
+        href="/rule-configurations"
+        class="govuk-back-link"
+      >
+        Back
+      </a>
+
+      <span class="govuk-caption-xl">
+        {{ ruleConfiguration.ruleId }}
+      </span>
+
+      <h1 class="govuk-heading-xl">
+        Rule configuration
+      </h1>
+
+      <dl class="govuk-summary-list">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Rule
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ ruleConfiguration.ruleId }}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Version
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ ruleConfiguration.ruleVersion }}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Revision
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ ruleConfiguration.revision }}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Status
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if ruleConfiguration.status == "PUBLISHED" %}
+              <strong class="govuk-tag govuk-tag--green">
+                Published
+              </strong>
+            {% else %}
+              <strong class="govuk-tag govuk-tag--grey">
+                Draft
+              </strong>
+            {% endif %}
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-l govuk-!-margin-top-8">
+        Parameters
+      </h2>
+
+      <dl class="govuk-summary-list">
+
+        {% for name, value in ruleConfiguration.parameters %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              {{ name }}
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{ value }}
+            </dd>
+          </div>
+        {% endfor %}
+
+      </dl>
+
+      <h2 class="govuk-heading-l govuk-!-margin-top-8">
+        Device compliance
+      </h2>
+
+      <div class="govuk-grid-row govuk-!-margin-bottom-8">
+
+        <div class="govuk-grid-column-one-half">
+          <span class="govuk-caption-m">
+            Compliant
+          </span>
+          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+            {{ ruleConfiguration.summary.compliant }}
+          </strong>
+        </div>
+
+        <div class="govuk-grid-column-one-half">
+          <span class="govuk-caption-m">
+            Non-compliant
+          </span>
+          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+            {{ ruleConfiguration.summary.nonCompliant }}
+          </strong>
+        </div>
+
+      </div>
+
+      <div class="govuk-grid-row govuk-!-margin-bottom-8">
+
+        <div class="govuk-grid-column-one-half">
+          <span class="govuk-caption-m">
+            No data
+          </span>
+          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+            {{ ruleConfiguration.summary.noData }}
+          </strong>
+        </div>
+
+        <div class="govuk-grid-column-one-half">
+          <span class="govuk-caption-m">
+            Deactivated
+          </span>
+          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+            {{ ruleConfiguration.summary.deactivated }}
+          </strong>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Device compliances" %}
+{% set currentNavigation = "device-compliance" %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">
+        Device compliance
+      </h1>
+
+      <div class="govuk-grid-row govuk-!-margin-bottom-8">
+
+        <div class="govuk-grid-column-one-third">
+          <span class="govuk-caption-m">
+            Compliant
+          </span>
+          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+            {{ deviceComplianceList.summary.compliant }}
+          </strong>
+        </div>
+
+        <div class="govuk-grid-column-one-third">
+          <span class="govuk-caption-m">
+            Non-compliant
+          </span>
+          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+            {{ deviceComplianceList.summary.nonCompliant }}
+          </strong>
+        </div>
+
+        <div class="govuk-grid-column-one-third">
+          <span class="govuk-caption-m">
+            Deactivated
+          </span>
+          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+            {{ deviceComplianceList.summary.deactivated }}
+          </strong>
+        </div>
+
+      </div>
+
+      <h2 class="govuk-heading-l">
+        Devices
+      </h2>
+
+      {% if deviceComplianceList.devices.length %}
+
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Device ID
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Status
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Compliance
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="govuk-table__body">
+
+            {% for device in deviceComplianceList.devices %}
+              <tr class="govuk-table__row">
+
+                <th
+                  scope="row"
+                  class="govuk-table__header"
+                >
+                  <a
+                    class="govuk-link"
+                    href="/device-compliance/{{ device.id }}"
+                  >
+                    {{ device.deviceId }}
+                  </a>
+                </th>
+
+                <td class="govuk-table__cell">
+                  {% if device.status == "ACTIVATED" %}
+                    Activated
+                  {% else %}
+                    Deactivated
+                  {% endif %}
+                </td>
+
+                <td class="govuk-table__cell">
+
+                  {% if device.state == "COMPLIANT" %}
+                    <strong class="govuk-tag govuk-tag--green">
+                      Compliant
+                    </strong>
+
+                  {% elif device.state == "NON_COMPLIANT" %}
+                    <strong class="govuk-tag govuk-tag--red">
+                      Non-compliant
+                    </strong>
+
+                  {% else %}
+                    <strong class="govuk-tag govuk-tag--grey">
+                      Not applicable
+                    </strong>
+                  {% endif %}
+
+                </td>
+
+              </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+
+      {% else %}
+
+        <p class="govuk-body">
+          There are no devices to display.
+        </p>
+
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

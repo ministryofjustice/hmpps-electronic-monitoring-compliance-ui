@@ -1,0 +1,184 @@
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Device compliance" %}
+{% set currentNavigation = "device-compliance" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <a href="/device-compliance" class="govuk-back-link">
+        Back
+      </a>
+
+      <span class="govuk-caption-xl">
+        Device {{ deviceCompliance.deviceId }}
+      </span>
+
+      <h1 class="govuk-heading-xl">
+        Device compliance
+      </h1>
+
+      <dl class="govuk-summary-list">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Device ID
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ deviceCompliance.deviceId }}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Status
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if deviceCompliance.status == "ACTIVATED" %}
+              Activated
+            {% else %}
+              Deactivated
+            {% endif %}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Compliance
+          </dt>
+          <dd class="govuk-summary-list__value">
+
+            {% if deviceCompliance.state == "COMPLIANT" %}
+              <strong class="govuk-tag govuk-tag--green">
+                Compliant
+              </strong>
+
+            {% elif deviceCompliance.state == "NON_COMPLIANT" %}
+              <strong class="govuk-tag govuk-tag--red">
+                Non-compliant
+              </strong>
+
+            {% else %}
+              <strong class="govuk-tag govuk-tag--grey">
+                Not applicable
+              </strong>
+            {% endif %}
+
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            State changed
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if deviceCompliance.stateChangedAt %}
+              {{ deviceCompliance.stateChangedAt }}
+            {% else %}
+              Not available
+            {% endif %}
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-l govuk-!-margin-top-8">
+        Rule compliance
+      </h2>
+
+      {% if deviceCompliance.rules.length %}
+
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Rule
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Version
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Compliance
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                State changed
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="govuk-table__body">
+
+            {% for rule in deviceCompliance.rules %}
+              <tr class="govuk-table__row">
+
+                <th
+                  scope="row"
+                  class="govuk-table__header"
+                >
+                  {{ rule.ruleId }}
+                </th>
+
+                <td class="govuk-table__cell">
+                  {{ rule.ruleVersion }}
+                </td>
+
+                <td class="govuk-table__cell">
+
+                  {% if rule.state == "COMPLIANT" %}
+                    <strong class="govuk-tag govuk-tag--green">
+                      Compliant
+                    </strong>
+
+                  {% elif rule.state == "NON_COMPLIANT" %}
+                    <strong class="govuk-tag govuk-tag--red">
+                      Non-compliant
+                    </strong>
+
+                  {% else %}
+                    <strong class="govuk-tag govuk-tag--grey">
+                      No data
+                    </strong>
+                  {% endif %}
+
+                </td>
+
+                <td class="govuk-table__cell">
+                  {% if rule.stateChangedAt %}
+                    {{ rule.stateChangedAt }}
+                  {% else %}
+                    Not available
+                  {% endif %}
+                </td>
+
+              </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+
+      {% else %}
+
+        <p class="govuk-body">
+          There are no compliance rules for this device.
+        </p>
+
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

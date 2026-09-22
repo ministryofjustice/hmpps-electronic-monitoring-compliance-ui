@@ -1,0 +1,63 @@
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Rule configurations" %}
+{% set currentNavigation = "rule-configurations" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">
+        Rule configurations
+      </h1>
+
+      {% if ruleConfigurations.length %}
+
+        <table class="govuk-table">
+          <caption class="govuk-table__caption govuk-table__caption--m">
+            Current rule configurations
+          </caption>
+
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Rule</th>
+              <th scope="col" class="govuk-table__header">Version</th>
+              <th scope="col" class="govuk-table__header">Revision</th>
+            </tr>
+          </thead>
+
+          <tbody class="govuk-table__body">
+            {% for ruleConfiguration in ruleConfigurations %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <a
+                    class="govuk-link"
+                    href="/rule-configurations/{{ ruleConfiguration.id }}"
+                  >
+                    {{ ruleConfiguration.ruleId }}
+                  </a>
+                </td>
+                <td class="govuk-table__cell">
+                  {{ ruleConfiguration.ruleVersion }}
+                </td>
+                <td class="govuk-table__cell">
+                  {{ ruleConfiguration.revision }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      {% else %}
+
+        <p class="govuk-body">
+          There are no rule configurations.
+        </p>
+
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}
