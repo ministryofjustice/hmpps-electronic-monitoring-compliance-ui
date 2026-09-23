@@ -1,9 +1,10 @@
 import { RuleComplianceSummary } from './ruleComplianceSummary'
 import { RuleConfigurationStatus } from './ruleConfigurationStatus'
+import { RuleId } from './ruleId'
 
 export type RuleConfiguration = {
   id: string
-  ruleId: string
+  ruleId: RuleId
   ruleVersion: number
   revision: number
   parameters: Record<string, string | number>
