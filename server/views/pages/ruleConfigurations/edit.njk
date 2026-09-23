@@ -1,0 +1,82 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = "Change rule configuration" %}
+{% set currentNavigation = "rule-configurations" %}
+
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <a
+        href="/rule-configurations/{{ ruleConfiguration.id }}"
+        class="govuk-back-link"
+      >
+        Back
+      </a>
+
+      <span class="govuk-caption-xl">
+        {{ ruleConfiguration.ruleId }}
+      </span>
+
+      <h1 class="govuk-heading-xl">
+        Change rule configuration
+      </h1>
+
+      <p class="govuk-body">
+        Changing this configuration will create a new draft revision.
+        The published configuration will remain unchanged.
+      </p>
+
+      <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        {% for field in formDefinition.fields.parameters %}
+
+          {% set fieldError = errors[field.name] %}
+
+          {{ govukInput({
+            id: field.name,
+            name: field.name,
+            type: field.type,
+            value: values[field.name]
+              if values
+              else ruleConfiguration.parameters[field.name],
+
+            classes: "govuk-input--width-" + field.width
+              if field.width
+              else "",
+
+            label: {
+              text: field.label,
+              classes: "govuk-label--m"
+            },
+
+            hint: {
+              text: field.hint
+            } if field.hint else null,
+
+            errorMessage: {
+              text: fieldError
+            } if fieldError else null,
+
+            suffix: {
+              text: field.suffix
+            } if field.suffix else null
+          }) }}
+
+        {% endfor %}
+
+        {{ govukButton({
+          text: "Save as draft"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
