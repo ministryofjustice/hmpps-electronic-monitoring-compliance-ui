@@ -23,6 +23,15 @@
         Rule configuration
       </h1>
 
+      {% if ruleConfiguration.status == "PUBLISHED" %}
+        <a
+          href="/rule-configurations/{{ ruleConfiguration.id }}/edit"
+          class="govuk-button"
+        >
+          Change configuration
+        </a>
+      {% endif %}
+
       <dl class="govuk-summary-list">
 
         <div class="govuk-summary-list__row">

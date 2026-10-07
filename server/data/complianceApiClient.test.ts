@@ -173,4 +173,56 @@ describe('ComplianceApiClient', () => {
       })
     })
   })
+
+  describe('createRuleConfigurationDraft', () => {
+    it('should create a rule configuration draft using a system token', async () => {
+      const requestBody = {
+        parameters: {
+          threshold: 50,
+        },
+      }
+
+      nock(config.apis.complianceApi.url)
+        .post('/v1/rule-configurations/d922503c-886c-4e3d-bf66-0cf76a5bf5de/draft', requestBody)
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(201, {
+          id: 'a794058b-720b-47ef-af58-814050774b4f',
+          ruleId: 'BATTERY_LEVEL',
+          ruleVersion: 1,
+          revision: 2,
+          parameters: {
+            threshold: 50,
+          },
+          status: 'DRAFT',
+          summary: {
+            compliant: 0,
+            nonCompliant: 0,
+            noData: 0,
+            deactivated: 0,
+          },
+        })
+
+      const response = await complianceApiClient.createRuleConfigurationDraft(
+        'd922503c-886c-4e3d-bf66-0cf76a5bf5de',
+        requestBody,
+      )
+
+      expect(response).toEqual({
+        id: 'a794058b-720b-47ef-af58-814050774b4f',
+        ruleId: 'BATTERY_LEVEL',
+        ruleVersion: 1,
+        revision: 2,
+        parameters: {
+          threshold: 50,
+        },
+        status: 'DRAFT',
+        summary: {
+          compliant: 0,
+          nonCompliant: 0,
+          noData: 0,
+          deactivated: 0,
+        },
+      })
+    })
+  })
 })

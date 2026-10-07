@@ -6,10 +6,21 @@ import logger from '../../logger'
 import { DeviceComplianceList } from '../types/deviceComplianceList'
 import { DeviceCompliance } from '../types/deviceCompliance'
 import { RuleConfiguration } from '../types/ruleConfiguration'
+import { RuleConfigurationRequest } from '../types/ruleConfigurationRequest'
 
 export default class ComplianceApiClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
     super('Electronic Monitoring Compliance API', config.apis.complianceApi, logger, authenticationClient)
+  }
+
+  async createRuleConfigurationDraft(id: string, request: RuleConfigurationRequest): Promise<RuleConfiguration> {
+    return this.post<RuleConfiguration>(
+      {
+        path: `/v1/rule-configurations/${id}/draft`,
+        data: request,
+      },
+      asSystem(),
+    )
   }
 
   async getDeviceCompliance(id: string): Promise<DeviceCompliance> {
