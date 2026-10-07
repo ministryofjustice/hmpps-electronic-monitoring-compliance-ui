@@ -24,12 +24,23 @@
       </h1>
 
       {% if ruleConfiguration.status == "PUBLISHED" %}
-        <a
-          href="/rule-configurations/{{ ruleConfiguration.id }}/edit"
-          class="govuk-button"
-        >
-          Change configuration
-        </a>
+
+        {% if draft %}
+          <a
+            href="/rule-configurations/{{ draft.id }}/edit"
+            class="govuk-button"
+          >
+            Continue editing
+          </a>
+        {% else %}
+          <a
+            href="/rule-configurations/{{ ruleConfiguration.id }}/edit"
+            class="govuk-button"
+          >
+            Change configuration
+          </a>
+        {% endif %}
+
       {% endif %}
 
       <dl class="govuk-summary-list">
@@ -99,53 +110,57 @@
 
       </dl>
 
-      <h2 class="govuk-heading-l govuk-!-margin-top-8">
-        Device compliance
-      </h2>
+      {% if ruleConfiguration.summary %}
 
-      <div class="govuk-grid-row govuk-!-margin-bottom-8">
+        <h2 class="govuk-heading-l govuk-!-margin-top-8">
+          Device compliance summary
+        </h2>
 
-        <div class="govuk-grid-column-one-half">
-          <span class="govuk-caption-m">
-            Compliant
-          </span>
-          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ ruleConfiguration.summary.compliant }}
-          </strong>
+        <div class="govuk-grid-row govuk-!-margin-bottom-8">
+
+          <div class="govuk-grid-column-one-half">
+            <span class="govuk-caption-m">
+              Compliant
+            </span>
+            <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+              {{ ruleConfiguration.summary.compliant }}
+            </strong>
+          </div>
+
+          <div class="govuk-grid-column-one-half">
+            <span class="govuk-caption-m">
+              Non-compliant
+            </span>
+            <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+              {{ ruleConfiguration.summary.nonCompliant }}
+            </strong>
+          </div>
+
         </div>
 
-        <div class="govuk-grid-column-one-half">
-          <span class="govuk-caption-m">
-            Non-compliant
-          </span>
-          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ ruleConfiguration.summary.nonCompliant }}
-          </strong>
+        <div class="govuk-grid-row govuk-!-margin-bottom-8">
+
+          <div class="govuk-grid-column-one-half">
+            <span class="govuk-caption-m">
+              No data
+            </span>
+            <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+              {{ ruleConfiguration.summary.noData }}
+            </strong>
+          </div>
+
+          <div class="govuk-grid-column-one-half">
+            <span class="govuk-caption-m">
+              Deactivated
+            </span>
+            <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
+              {{ ruleConfiguration.summary.deactivated }}
+            </strong>
+          </div>
+
         </div>
 
-      </div>
-
-      <div class="govuk-grid-row govuk-!-margin-bottom-8">
-
-        <div class="govuk-grid-column-one-half">
-          <span class="govuk-caption-m">
-            No data
-          </span>
-          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ ruleConfiguration.summary.noData }}
-          </strong>
-        </div>
-
-        <div class="govuk-grid-column-one-half">
-          <span class="govuk-caption-m">
-            Deactivated
-          </span>
-          <strong class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ ruleConfiguration.summary.deactivated }}
-          </strong>
-        </div>
-
-      </div>
+      {% endif %}
 
     </div>
   </div>

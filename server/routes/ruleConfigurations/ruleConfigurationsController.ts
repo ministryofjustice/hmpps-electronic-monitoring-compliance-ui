@@ -50,8 +50,14 @@ export default class RuleConfigurationsController {
   get: RequestHandler<RuleConfigurationParams> = async (req, res) => {
     const ruleConfiguration = await this.ruleConfigurationService.getRuleConfiguration(req.params.ruleConfigurationId)
 
+    const draft =
+      ruleConfiguration.status === 'PUBLISHED'
+        ? await this.ruleConfigurationService.getRuleConfigurationDraft(ruleConfiguration.id)
+        : null
+
     res.render('pages/ruleConfigurations/detail', {
       ruleConfiguration,
+      draft,
     })
   }
 

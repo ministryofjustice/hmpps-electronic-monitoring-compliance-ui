@@ -14,6 +14,10 @@ export default class RuleConfigurationService {
     return this.complianceApiClient.getRuleConfiguration(id)
   }
 
+  async getRuleConfigurationDraft(id: string): Promise<RuleConfiguration | null> {
+    return this.complianceApiClient.getRuleConfigurationDraft(id)
+  }
+
   async getRuleConfigurations(): Promise<RuleConfigurationSummary[]> {
     return this.complianceApiClient.getRuleConfigurations()
   }

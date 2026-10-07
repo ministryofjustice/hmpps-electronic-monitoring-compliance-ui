@@ -50,6 +50,23 @@ export default class ComplianceApiClient extends RestClient {
     )
   }
 
+  async getRuleConfigurationDraft(id: string): Promise<RuleConfiguration | null> {
+    try {
+      return await this.get<RuleConfiguration>(
+        {
+          path: `/v1/rule-configurations/${id}/draft`,
+        },
+        asSystem(),
+      )
+    } catch (error) {
+      if ((error as { responseStatus?: number }).responseStatus === 404) {
+        return null
+      }
+
+      throw error
+    }
+  }
+
   async getRuleConfigurations(): Promise<RuleConfigurationSummary[]> {
     return this.get<RuleConfigurationSummary[]>(
       {
