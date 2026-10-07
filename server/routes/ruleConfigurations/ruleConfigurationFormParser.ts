@@ -6,8 +6,8 @@ import { FieldDefinition } from './types/fieldDefinition'
 import { ParseResult } from './types/parseResult'
 
 const createValidationError =
-  <T>(field: string) =>
-  (message: string): FieldParseResult<T> => ({
+  (field: string) =>
+  <T>(message: string): FieldParseResult<T> => ({
     ok: false,
     error: {
       field,
@@ -16,7 +16,7 @@ const createValidationError =
   })
 
 const parseNumericField = (field: FieldDefinition, value: string | undefined): FieldParseResult<number> => {
-  const createError = createValidationError<number>(field.name)
+  const createError = createValidationError(field.name)
 
   if (!value) {
     return createError(`${field.label} is required`)
@@ -43,7 +43,7 @@ const parseNumericField = (field: FieldDefinition, value: string | undefined): F
 }
 
 const parseTextField = (field: FieldDefinition, value: string | undefined): FieldParseResult<string> => {
-  const createError = createValidationError<string>(field.name)
+  const createError = createValidationError(field.name)
 
   if (!value) {
     return createError(`${field.label} is required`)
