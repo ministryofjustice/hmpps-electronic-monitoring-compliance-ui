@@ -75,4 +75,14 @@ export default class ComplianceApiClient extends RestClient {
       asSystem(),
     )
   }
+
+  async updateRuleConfigurationDraft(id: string, request: RuleConfigurationRequest): Promise<RuleConfiguration> {
+    return this.put<RuleConfiguration>(
+      {
+        path: `/v1/rule-configurations/${id}`,
+        data: request,
+      },
+      asSystem(),
+    )
+  }
 }

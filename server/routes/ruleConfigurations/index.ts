@@ -8,7 +8,7 @@ export default function routes(ruleConfigurationService: RuleConfigurationServic
 
   router.get('/', controller.list)
   router.get('/:ruleConfigurationId/edit', controller.edit)
-  router.post('/:ruleConfigurationId/edit', controller.createDraft)
+  router.post('/:ruleConfigurationId/edit', controller.save)
   router.get('/:ruleConfigurationId', controller.get)
 
   return router

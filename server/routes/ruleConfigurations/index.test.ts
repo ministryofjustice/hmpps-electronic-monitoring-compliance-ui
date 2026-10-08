@@ -216,6 +216,42 @@ describe('POST /rule-configurations/:ruleConfigurationId/edit', () => {
             threshold: 50,
           },
         })
+        expect(ruleConfigurationService.updateRuleConfigurationDraft).not.toHaveBeenCalled()
+      })
+  })
+
+  it('should update an existing draft and redirect to it', () => {
+    const draft = createMockRuleConfiguration({
+      status: 'DRAFT',
+      revision: 2,
+      summary: null,
+    })
+
+    ruleConfigurationService.getRuleConfiguration.mockResolvedValue(draft)
+
+    ruleConfigurationService.updateRuleConfigurationDraft.mockResolvedValue({
+      ...draft,
+      parameters: {
+        threshold: 50,
+      },
+    })
+
+    return request(app)
+      .post(`/rule-configurations/${draft.id}/edit`)
+      .type('form')
+      .send({
+        threshold: '50',
+      })
+      .expect(302)
+      .expect('Location', `/rule-configurations/${draft.id}`)
+      .expect(() => {
+        expect(ruleConfigurationService.updateRuleConfigurationDraft).toHaveBeenCalledWith(draft.id, {
+          parameters: {
+            threshold: 50,
+          },
+        })
+
+        expect(ruleConfigurationService.createRuleConfigurationDraft).not.toHaveBeenCalled()
       })
   })
 

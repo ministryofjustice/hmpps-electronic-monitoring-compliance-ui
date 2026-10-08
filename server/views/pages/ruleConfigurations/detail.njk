@@ -43,6 +43,15 @@
 
       {% endif %}
 
+      {% if ruleConfiguration.status == "DRAFT" %}
+        <a
+          href="/rule-configurations/{{ ruleConfiguration.id }}/edit"
+          class="govuk-button"
+        >
+          Continue editing
+        </a>
+      {% endif %}
+
       <dl class="govuk-summary-list">
 
         <div class="govuk-summary-list__row">
