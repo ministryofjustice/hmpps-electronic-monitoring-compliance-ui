@@ -63,6 +63,50 @@ describe('ComplianceApiClient', () => {
     })
   })
 
+  describe('getRuleConfigurationDraft', () => {
+    it('should get a rule configuration draft using a system token', async () => {
+      nock(config.apis.complianceApi.url)
+        .get('/v1/rule-configurations/d922503c-886c-4e3d-bf66-0cf76a5bf5de/draft')
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(200, {
+          id: 'a794058b-720b-47ef-af58-814050774b4f',
+          ruleId: 'BATTERY_LEVEL',
+          ruleVersion: 1,
+          revision: 2,
+          parameters: {
+            threshold: 50,
+          },
+          status: 'DRAFT',
+          summary: null,
+        })
+
+      const response = await complianceApiClient.getRuleConfigurationDraft('d922503c-886c-4e3d-bf66-0cf76a5bf5de')
+
+      expect(response).toEqual({
+        id: 'a794058b-720b-47ef-af58-814050774b4f',
+        ruleId: 'BATTERY_LEVEL',
+        ruleVersion: 1,
+        revision: 2,
+        parameters: {
+          threshold: 50,
+        },
+        status: 'DRAFT',
+        summary: null,
+      })
+    })
+
+    it('should return null when no draft exists', async () => {
+      nock(config.apis.complianceApi.url)
+        .get('/v1/rule-configurations/d922503c-886c-4e3d-bf66-0cf76a5bf5de/draft')
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(404)
+
+      const response = await complianceApiClient.getRuleConfigurationDraft('d922503c-886c-4e3d-bf66-0cf76a5bf5de')
+
+      expect(response).toBeNull()
+    })
+  })
+
   describe('getRuleConfigurations', () => {
     it('should get rule configurations using a system token', async () => {
       nock(config.apis.complianceApi.url)

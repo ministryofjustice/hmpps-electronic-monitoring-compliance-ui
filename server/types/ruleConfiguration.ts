@@ -9,5 +9,5 @@ export type RuleConfiguration = {
   revision: number
   parameters: Record<string, string | number>
   status: RuleConfigurationStatus
-  summary: RuleComplianceSummary
+  summary: RuleComplianceSummary | null
 }

@@ -66,22 +66,10 @@ describe('GET /rule-configurations', () => {
 
 describe('GET /rule-configurations/:ruleConfigurationId', () => {
   it('should render rule configuration detail', () => {
-    ruleConfigurationService.getRuleConfiguration.mockResolvedValue({
-      id: 'd922503c-886c-4e3d-bf66-0cf76a5bf5de',
-      ruleId: 'BATTERY_LEVEL',
-      ruleVersion: 1,
-      revision: 1,
-      parameters: {
-        threshold: 20,
-      },
-      status: 'PUBLISHED',
-      summary: {
-        compliant: 0,
-        nonCompliant: 0,
-        noData: 0,
-        deactivated: 0,
-      },
-    })
+    const configuration = createMockRuleConfiguration()
+
+    ruleConfigurationService.getRuleConfiguration.mockResolvedValue(configuration)
+    ruleConfigurationService.getRuleConfigurationDraft.mockResolvedValue(null)
 
     return request(app)
       .get('/rule-configurations/d922503c-886c-4e3d-bf66-0cf76a5bf5de')
@@ -96,6 +84,64 @@ describe('GET /rule-configurations/:ruleConfigurationId', () => {
         expect(res.text).toContain('Published')
         expect(res.text).toContain('threshold')
         expect(res.text).toContain('20')
+      })
+  })
+
+  it('should show change configuration when no draft exists', () => {
+    const configuration = createMockRuleConfiguration()
+
+    ruleConfigurationService.getRuleConfiguration.mockResolvedValue(configuration)
+    ruleConfigurationService.getRuleConfigurationDraft.mockResolvedValue(null)
+
+    return request(app)
+      .get(`/rule-configurations/${configuration.id}`)
+      .expect(200)
+      .expect(res => {
+        expect(ruleConfigurationService.getRuleConfigurationDraft).toHaveBeenCalledWith(configuration.id)
+
+        expect(res.text).toContain('Change configuration')
+        expect(res.text).not.toContain('Continue editing')
+      })
+  })
+
+  it('should show the existing draft when one exists', () => {
+    const configuration = createMockRuleConfiguration()
+
+    const draft = createMockRuleConfiguration({
+      id: randomUUID(),
+      revision: 2,
+      status: 'DRAFT',
+      summary: null,
+    })
+
+    ruleConfigurationService.getRuleConfiguration.mockResolvedValue(configuration)
+    ruleConfigurationService.getRuleConfigurationDraft.mockResolvedValue(draft)
+
+    return request(app)
+      .get(`/rule-configurations/${configuration.id}`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Continue editing')
+        expect(res.text).toContain(`/rule-configurations/${draft.id}/edit`)
+        expect(res.text).not.toContain('Change configuration')
+      })
+  })
+
+  it('should render a draft without compliance summary', () => {
+    const draft = createMockRuleConfiguration({
+      status: 'DRAFT',
+      revision: 2,
+      summary: null,
+    })
+
+    ruleConfigurationService.getRuleConfiguration.mockResolvedValue(draft)
+
+    return request(app)
+      .get(`/rule-configurations/${draft.id}`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Draft')
+        expect(res.text).not.toContain('Device compliance summary')
       })
   })
 
