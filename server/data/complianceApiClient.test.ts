@@ -269,4 +269,37 @@ describe('ComplianceApiClient', () => {
       })
     })
   })
+
+  describe('updateRuleConfigurationDraft', () => {
+    it('should update a draft using a system token', async () => {
+      const id = 'a794058b-720b-47ef-af58-814050774b4f'
+
+      const requestBody = {
+        parameters: {
+          threshold: 50,
+        },
+      }
+
+      const updated = {
+        id,
+        ruleId: 'BATTERY_LEVEL',
+        ruleVersion: 1,
+        revision: 2,
+        parameters: {
+          threshold: 50,
+        },
+        status: 'DRAFT',
+        summary: null,
+      }
+
+      nock(config.apis.complianceApi.url)
+        .put(`/v1/rule-configurations/${id}`, requestBody)
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(200, updated)
+
+      const response = await complianceApiClient.updateRuleConfigurationDraft(id, requestBody)
+
+      expect(response).toEqual(updated)
+    })
+  })
 })

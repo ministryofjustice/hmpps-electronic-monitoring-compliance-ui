@@ -21,4 +21,8 @@ export default class RuleConfigurationService {
   async getRuleConfigurations(): Promise<RuleConfigurationSummary[]> {
     return this.complianceApiClient.getRuleConfigurations()
   }
+
+  async updateRuleConfigurationDraft(id: string, request: RuleConfigurationRequest): Promise<RuleConfiguration> {
+    return this.complianceApiClient.updateRuleConfigurationDraft(id, request)
+  }
 }

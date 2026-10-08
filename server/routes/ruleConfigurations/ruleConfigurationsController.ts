@@ -11,32 +11,6 @@ type RuleConfigurationParams = {
 export default class RuleConfigurationsController {
   constructor(private readonly ruleConfigurationService: RuleConfigurationService) {}
 
-  createDraft: RequestHandler<RuleConfigurationParams> = async (req, res) => {
-    const sourceConfiguration = await this.ruleConfigurationService.getRuleConfiguration(req.params.ruleConfigurationId)
-    const formDefinition = getRuleConfigurationFormDefinition(
-      sourceConfiguration.ruleId,
-      sourceConfiguration.ruleVersion,
-    )
-    const parseResult = parseRuleConfigurationForm(formDefinition, req.body)
-
-    if (!parseResult.ok) {
-      res.status(400).render('pages/ruleConfigurations/edit', {
-        ruleConfiguration: sourceConfiguration,
-        formDefinition,
-        errors: presentValidationErrorsByField(parseResult.errors),
-        values: req.body,
-      })
-      return
-    }
-
-    const ruleConfiguration = await this.ruleConfigurationService.createRuleConfigurationDraft(
-      req.params.ruleConfigurationId,
-      parseResult.value,
-    )
-
-    res.redirect(`/rule-configurations/${ruleConfiguration.id}`)
-  }
-
   edit: RequestHandler<RuleConfigurationParams> = async (req, res) => {
     const ruleConfiguration = await this.ruleConfigurationService.getRuleConfiguration(req.params.ruleConfigurationId)
     const formDefinition = getRuleConfigurationFormDefinition(ruleConfiguration.ruleId, ruleConfiguration.ruleVersion)
@@ -67,5 +41,28 @@ export default class RuleConfigurationsController {
     res.render('pages/ruleConfigurations/index', {
       ruleConfigurations,
     })
+  }
+
+  save: RequestHandler<RuleConfigurationParams> = async (req, res) => {
+    const configuration = await this.ruleConfigurationService.getRuleConfiguration(req.params.ruleConfigurationId)
+    const formDefinition = getRuleConfigurationFormDefinition(configuration.ruleId, configuration.ruleVersion)
+    const parseResult = parseRuleConfigurationForm(formDefinition, req.body)
+
+    if (!parseResult.ok) {
+      res.status(400).render('pages/ruleConfigurations/edit', {
+        ruleConfiguration: configuration,
+        formDefinition,
+        errors: presentValidationErrorsByField(parseResult.errors),
+        values: req.body,
+      })
+      return
+    }
+
+    const saved =
+      configuration.status === 'DRAFT'
+        ? await this.ruleConfigurationService.updateRuleConfigurationDraft(configuration.id, parseResult.value)
+        : await this.ruleConfigurationService.createRuleConfigurationDraft(configuration.id, parseResult.value)
+
+    res.redirect(`/rule-configurations/${saved.id}`)
   }
 }
